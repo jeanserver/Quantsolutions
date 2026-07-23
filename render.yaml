@@ -42,6 +42,6 @@ services:
 
 databases:
   - name: quantsolutions-db
-    plan: starter
+    plan: basic-256mb
     databaseName: quantsolutions
     user: quantsolutions_user
