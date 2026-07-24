@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS investments (
   name             VARCHAR(150) NOT NULL,
   category         VARCHAR(100) NOT NULL,
   description      TEXT NOT NULL,
-  minimum_amount   NUMERIC(14,2) NOT NULL,
+  minimum_amount   NUMERIC(14,2),
+  performance_fee_percent NUMERIC(5,2) NOT NULL DEFAULT 0,
   created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -210,17 +211,51 @@ CREATE TRIGGER trg_withdrawal_update_sync
   EXECUTE FUNCTION sync_withdrawal_update();
 
 -- =========================================================
--- Seed default investment plan catalog if empty
+-- Investment plan catalog: tiered Basic/Standard/Advanced/Premium/
+-- Institutional structure. Performance fee only — no ROI/return
+-- promises are stored or displayed anywhere in this schema.
+-- Safe to re-run: replaces the old default catalog exactly once.
 -- =========================================================
+ALTER TABLE investments
+  ADD COLUMN IF NOT EXISTS performance_fee_percent NUMERIC(5,2) NOT NULL DEFAULT 0;
+
+ALTER TABLE investments ALTER COLUMN minimum_amount DROP NOT NULL;
+
 DO $$
 BEGIN
-  IF NOT EXISTS (SELECT 1 FROM investments) THEN
-    INSERT INTO investments (name, category, description, minimum_amount) VALUES
-    ('Managed Portfolio Advisory', 'Advisory', 'A professionally managed, diversified portfolio built around your risk profile and goals.', 5000),
-    ('Retirement Planning', 'Planning', 'Long-term planning for sustainable retirement income with tax-aware strategies.', 2500),
-    ('Fixed Income Strategy', 'Fixed Income', 'Capital-preservation-focused strategy using government and investment-grade bonds.', 10000),
-    ('Equity Growth Strategy', 'Equity', 'Long-term equity strategy focused on fundamentally strong, diversified businesses.', 7500),
-    ('Institutional Advisory', 'Institutional', 'Dedicated advisory mandate for institutions, trusts, and endowments.', 50000),
-    ('Financial Planning', 'Planning', 'Holistic financial planning covering budgeting, education, and estate coordination.', 1000);
+  IF EXISTS (SELECT 1 FROM investments WHERE name = 'Managed Portfolio Advisory') THEN
+    DELETE FROM investments WHERE name IN (
+      'Managed Portfolio Advisory', 'Retirement Planning', 'Fixed Income Strategy',
+      'Equity Growth Strategy', 'Institutional Advisory', 'Financial Planning'
+    );
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM investments WHERE name = 'Basic') THEN
+    INSERT INTO investments (name, category, description, minimum_amount, performance_fee_percent) VALUES
+    ('Basic', 'Retail', 'An entry-level managed plan for clients starting their investment journey.', 100, 2.00),
+    ('Standard', 'Retail', 'A step up in capital allocation with broader strategy access.', 10000, 3.50),
+    ('Advanced', 'Growth', 'For clients ready to commit larger capital to more active strategies.', 50000, 5.00),
+    ('Premium', 'Growth', 'Our highest retail tier, with priority access and dedicated support.', 250000, 6.50),
+    ('Institutional', 'Institutional', 'Custom mandates for institutions, trusts, and endowments. Contact us to discuss terms.', NULL, 7.00);
   END IF;
 END $$;
+
+-- =========================================================
+-- Crypto deposit/withdrawal method support
+-- Safe to re-run: guarded with IF NOT EXISTS / IF EXISTS throughout.
+-- =========================================================
+ALTER TABLE deposits DROP CONSTRAINT IF EXISTS deposits_method_check;
+ALTER TABLE deposits ADD CONSTRAINT deposits_method_check
+  CHECK (method IN ('bank_transfer', 'wire_transfer', 'check', 'bitcoin', 'ethereum', 'usdt'));
+
+ALTER TABLE withdrawals
+  ADD COLUMN IF NOT EXISTS method VARCHAR(20) NOT NULL DEFAULT 'bank_transfer',
+  ADD COLUMN IF NOT EXISTS wallet_address VARCHAR(255);
+
+ALTER TABLE withdrawals DROP CONSTRAINT IF EXISTS withdrawals_method_check;
+ALTER TABLE withdrawals ADD CONSTRAINT withdrawals_method_check
+  CHECK (method IN ('bank_transfer', 'bitcoin', 'ethereum', 'usdt'));
+
+ALTER TABLE withdrawals ALTER COLUMN bank_name DROP NOT NULL;
+ALTER TABLE withdrawals ALTER COLUMN account_name DROP NOT NULL;
+ALTER TABLE withdrawals ALTER COLUMN account_number DROP NOT NULL;
