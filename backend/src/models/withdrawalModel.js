@@ -1,17 +1,18 @@
 const { query } = require('../config/db');
 
 const PUBLIC_COLUMNS = `
-  id, user_id AS "userId", amount, bank_name AS "bankName",
-  account_name AS "accountName", account_number AS "accountNumber",
+  id, user_id AS "userId", amount, method,
+  bank_name AS "bankName", account_name AS "accountName", account_number AS "accountNumber",
+  wallet_address AS "walletAddress",
   status, reference, notes, created_at AS "createdAt", updated_at AS "updatedAt"
 `;
 
-async function create({ userId, amount, bankName, accountName, accountNumber, notes, reference }) {
+async function create({ userId, amount, method, bankName, accountName, accountNumber, walletAddress, notes, reference }) {
   const result = await query(
-    `INSERT INTO withdrawals (user_id, amount, bank_name, account_name, account_number, notes, reference)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
+    `INSERT INTO withdrawals (user_id, amount, method, bank_name, account_name, account_number, wallet_address, notes, reference)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
      RETURNING ${PUBLIC_COLUMNS}`,
-    [userId, amount, bankName, accountName, accountNumber, notes || null, reference]
+    [userId, amount, method, bankName || null, accountName || null, accountNumber || null, walletAddress || null, notes || null, reference]
   );
   return result.rows[0];
 }
@@ -35,8 +36,9 @@ async function findById(id) {
 async function findAll(limit = 100) {
   const result = await query(
     `SELECT
-       w.id, w.user_id AS "userId", w.amount, w.bank_name AS "bankName",
-       w.account_name AS "accountName", w.account_number AS "accountNumber",
+       w.id, w.user_id AS "userId", w.amount, w.method,
+       w.bank_name AS "bankName", w.account_name AS "accountName", w.account_number AS "accountNumber",
+       w.wallet_address AS "walletAddress",
        w.status, w.reference, w.notes, w.created_at AS "createdAt", w.updated_at AS "updatedAt",
        u.first_name AS "clientFirstName", u.last_name AS "clientLastName", u.email AS "clientEmail"
      FROM withdrawals w
