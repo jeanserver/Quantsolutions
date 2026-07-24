@@ -19,15 +19,17 @@ async function getMyWithdrawals(req, res, next) {
 
 async function createWithdrawal(req, res, next) {
   try {
-    const { amount, bankName, accountName, accountNumber, notes } = req.body;
+    const { amount, method, bankName, accountName, accountNumber, walletAddress, notes } = req.body;
     const reference = generateReference();
 
     const withdrawal = await withdrawalModel.create({
       userId: req.user.id,
       amount,
+      method,
       bankName,
       accountName,
       accountNumber,
+      walletAddress,
       notes,
       reference
     });
