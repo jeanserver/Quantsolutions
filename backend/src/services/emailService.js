@@ -46,6 +46,18 @@ function wrapTemplate(title, bodyHtml) {
   `;
 }
 
+function formatMethod(method) {
+  const labels = {
+    bank_transfer: 'Bank Transfer',
+    wire_transfer: 'Wire Transfer',
+    check: 'Check',
+    bitcoin: 'Bitcoin (BTC)',
+    ethereum: 'Ethereum (ETH)',
+    usdt: 'USDT'
+  };
+  return labels[method] || method;
+}
+
 async function sendWelcomeEmail(user) {
   const html = wrapTemplate(
     'Welcome to QuantSolutions',
@@ -87,7 +99,7 @@ async function notifyAdminOfDepositRequest(user, deposit) {
        <tr><td style="padding:6px 0;color:#666;">Client</td><td style="padding:6px 0;">${user.firstName} ${user.lastName}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Email</td><td style="padding:6px 0;">${user.email}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Amount</td><td style="padding:6px 0;">$${Number(deposit.amount).toFixed(2)}</td></tr>
-       <tr><td style="padding:6px 0;color:#666;">Method</td><td style="padding:6px 0;">${deposit.method}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Method</td><td style="padding:6px 0;">${formatMethod(deposit.method)}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Status</td><td style="padding:6px 0;">Pending Review</td></tr>
        ${deposit.notes ? `<tr><td style="padding:6px 0;color:#666;">Notes</td><td style="padding:6px 0;">${deposit.notes}</td></tr>` : ''}
      </table>
@@ -110,9 +122,12 @@ async function notifyAdminOfWithdrawalRequest(user, withdrawal) {
        <tr><td style="padding:6px 0;color:#666;">Client</td><td style="padding:6px 0;">${user.firstName} ${user.lastName}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Email</td><td style="padding:6px 0;">${user.email}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Amount</td><td style="padding:6px 0;">$${Number(withdrawal.amount).toFixed(2)}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Method</td><td style="padding:6px 0;">${formatMethod(withdrawal.method)}</td></tr>
+       ${withdrawal.method === 'bank_transfer' ? `
        <tr><td style="padding:6px 0;color:#666;">Bank Name</td><td style="padding:6px 0;">${withdrawal.bankName}</td></tr>
        <tr><td style="padding:6px 0;color:#666;">Account Name</td><td style="padding:6px 0;">${withdrawal.accountName}</td></tr>
-       <tr><td style="padding:6px 0;color:#666;">Account Number</td><td style="padding:6px 0;">${withdrawal.accountNumber}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Account Number</td><td style="padding:6px 0;">${withdrawal.accountNumber}</td></tr>` : `
+       <tr><td style="padding:6px 0;color:#666;">Wallet Address</td><td style="padding:6px 0;">${withdrawal.walletAddress || 'Not provided — contact client by email'}</td></tr>`}
        <tr><td style="padding:6px 0;color:#666;">Status</td><td style="padding:6px 0;">Pending Review</td></tr>
        ${withdrawal.notes ? `<tr><td style="padding:6px 0;color:#666;">Notes</td><td style="padding:6px 0;">${withdrawal.notes}</td></tr>` : ''}
      </table>
