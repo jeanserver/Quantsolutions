@@ -6,7 +6,7 @@ const depositValidator = [
     .withMessage('Deposit amount must be a positive number.'),
   body('method')
     .trim()
-    .isIn(['bank_transfer', 'wire_transfer', 'check'])
+    .isIn(['bank_transfer', 'wire_transfer', 'check', 'bitcoin', 'ethereum', 'usdt'])
     .withMessage('Invalid deposit method.'),
   body('notes').optional({ checkFalsy: true }).trim().isLength({ max: 1000 })
 ];
