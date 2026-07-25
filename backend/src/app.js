@@ -15,6 +15,7 @@ const depositRoutes = require('./routes/depositRoutes');
 const withdrawalRoutes = require('./routes/withdrawalRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const userInvestmentRoutes = require('./routes/userInvestmentRoutes');
 
 const app = express();
 
@@ -56,6 +57,7 @@ app.use('/api/deposits', depositRoutes);
 app.use('/api/withdrawals', withdrawalRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/user-investments', userInvestmentRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Resource not found.' });
