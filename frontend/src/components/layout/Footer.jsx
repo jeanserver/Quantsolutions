@@ -49,10 +49,10 @@ function Footer() {
             Contact
           </h4>
           <ul className="mt-4 space-y-2 text-sm text-gray-400">
-            <li>123 Financial District, Suite 400</li>
-            <li>New York, NY 10004</li>
-            <li>support@quantsolutions.com</li>
-            <li>+1 (800) 555-0199</li>
+            <li>Strickstrasse 65</li>
+            <li>8002 Zürich, Switzerland</li>
+            <li>support@quantsolutions.xyz</li>
+            <li>+1 (508) 964-3322</li>
           </ul>
         </div>
       </div>
