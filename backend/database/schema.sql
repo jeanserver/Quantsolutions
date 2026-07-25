@@ -275,3 +275,21 @@ ALTER TABLE user_investments ALTER COLUMN status SET DEFAULT 'pending';
 ALTER TABLE user_investments DROP CONSTRAINT IF EXISTS user_investments_status_check;
 ALTER TABLE user_investments ADD CONSTRAINT user_investments_status_check
   CHECK (status IN ('pending', 'active', 'rejected', 'closed'));
+
+-- =========================================================
+-- Plan performance entries: real, admin-reported period returns
+-- applied in bulk to every active client in a plan tier. Each entry
+-- is a record of an actual reported result — not a standing rate.
+-- =========================================================
+CREATE TABLE IF NOT EXISTS plan_performance_entries (
+  id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  investment_id    UUID NOT NULL REFERENCES investments(id) ON DELETE CASCADE,
+  period_label     VARCHAR(50) NOT NULL,
+  return_percent   NUMERIC(6,2) NOT NULL,
+  accounts_applied INTEGER NOT NULL DEFAULT 0,
+  notes            TEXT,
+  created_at       TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_plan_performance_investment_id
+  ON plan_performance_entries (investment_id);
