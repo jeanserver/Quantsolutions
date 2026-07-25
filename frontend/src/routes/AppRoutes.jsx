@@ -7,6 +7,7 @@ import ContactPage from '../pages/ContactPage.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
 import RegisterPage from '../pages/RegisterPage.jsx';
 import DashboardPage from '../pages/DashboardPage.jsx';
+import InvestmentPlansPage from '../pages/InvestmentPlansPage.jsx';
 import DepositRequestPage from '../pages/DepositRequestPage.jsx';
 import WithdrawalRequestPage from '../pages/WithdrawalRequestPage.jsx';
 import ProfilePage from '../pages/ProfilePage.jsx';
@@ -31,6 +32,14 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/investments"
+        element={
+          <ProtectedRoute>
+            <InvestmentPlansPage />
           </ProtectedRoute>
         }
       />
