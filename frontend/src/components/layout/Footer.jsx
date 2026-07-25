@@ -25,6 +25,9 @@ function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-gray-400">
             <li><Link to="/about" className="hover:text-brand-white">About Us</Link></li>
             <li><Link to="/investment-solutions" className="hover:text-brand-white">Investment Solutions</Link></li>
+            <li><Link to="/about/technology" className="hover:text-brand-white">Technology</Link></li>
+            <li><Link to="/about/investor-relations" className="hover:text-brand-white">Investor Relations</Link></li>
+            <li><Link to="/legal" className="hover:text-brand-white">Legal & Compliance</Link></li>
             <li><Link to="/faq" className="hover:text-brand-white">FAQ</Link></li>
             <li><Link to="/contact" className="hover:text-brand-white">Contact</Link></li>
           </ul>
