@@ -103,6 +103,9 @@ function DashboardPage() {
         </div>
 
         <div className="flex flex-wrap gap-3">
+          <Link to="/dashboard/investments" className="btn btn-outline">
+            Investment Plans
+          </Link>
           <Link to="/dashboard/deposit" className="btn btn-primary">
             Deposit Request
           </Link>
