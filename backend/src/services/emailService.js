@@ -141,9 +141,31 @@ async function notifyAdminOfWithdrawalRequest(user, withdrawal) {
   });
 }
 
+async function notifyAdminOfPlanSelection(user, selection) {
+  const html = wrapTemplate(
+    'New Investment Plan Selection',
+    `<p>A client has selected an investment plan and is awaiting your approval.</p>
+     <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+       <tr><td style="padding:6px 0;color:#666;">Client</td><td style="padding:6px 0;">${user.firstName} ${user.lastName}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Email</td><td style="padding:6px 0;">${user.email}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Plan</td><td style="padding:6px 0;"><strong>${selection.planName}</strong></td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Amount</td><td style="padding:6px 0;">$${Number(selection.investedAmount).toFixed(2)}</td></tr>
+       <tr><td style="padding:6px 0;color:#666;">Status</td><td style="padding:6px 0;">Pending Review</td></tr>
+     </table>
+     <p style="margin-top:16px;">Please review and approve or reject this selection in the admin dashboard.</p>`
+  );
+
+  await sendMail({
+    to: env.adminEmail,
+    subject: `New Plan Selection — ${selection.planName}`,
+    html
+  });
+}
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordChangedEmail,
   notifyAdminOfDepositRequest,
-  notifyAdminOfWithdrawalRequest
+  notifyAdminOfWithdrawalRequest,
+  notifyAdminOfPlanSelection
 };
