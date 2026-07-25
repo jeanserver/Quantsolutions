@@ -1,3 +1,3 @@
 import axiosClient from './axiosClient.js';
 
-export const getInvestmentPlansRequest = () => axiosClient.get('/investments');
+export const getInvestmentsRequest = () => axiosClient.get('/investments');
