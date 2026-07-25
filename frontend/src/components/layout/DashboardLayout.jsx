@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 
 const links = [
   { to: '/dashboard', label: 'Overview' },
+  { to: '/dashboard/investments', label: 'Investment Plans' },
   { to: '/dashboard/deposit', label: 'Deposit Request' },
   { to: '/dashboard/withdrawal', label: 'Withdrawal Request' },
   { to: '/dashboard/profile', label: 'Profile' }
