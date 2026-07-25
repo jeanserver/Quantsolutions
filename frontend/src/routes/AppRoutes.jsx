@@ -3,6 +3,9 @@ import HomePage from '../pages/HomePage.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
 import InvestmentSolutionsPage from '../pages/InvestmentSolutionsPage.jsx';
 import FAQPage from '../pages/FAQPage.jsx';
+import LegalPage from '../pages/LegalPage.jsx';
+import InvestorRelationsPage from '../pages/InvestorRelationsPage.jsx';
+import TechnologyPage from '../pages/TechnologyPage.jsx';
 import ContactPage from '../pages/ContactPage.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
 import RegisterPage from '../pages/RegisterPage.jsx';
@@ -23,6 +26,9 @@ function AppRoutes() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/investment-solutions" element={<InvestmentSolutionsPage />} />
       <Route path="/faq" element={<FAQPage />} />
+      <Route path="/legal" element={<LegalPage />} />
+      <Route path="/about/investor-relations" element={<InvestorRelationsPage />} />
+      <Route path="/about/technology" element={<TechnologyPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
