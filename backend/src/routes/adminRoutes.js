@@ -13,6 +13,8 @@ const {
 const { investmentWriteValidator } = require('../validators/investmentValidator');
 const userInvestmentModel = require('../models/userInvestmentModel');
 const { updateValueValidator } = require('../validators/userInvestmentValidator');
+const planPerformanceModel = require('../models/planPerformanceModel');
+const { applyPeriodReturnValidator } = require('../validators/planPerformanceValidator');
 const { success, failure } = require('../utils/apiResponse');
 const validateRequest = require('../middleware/validateRequest');
 const authMiddleware = require('../middleware/authMiddleware');
@@ -72,6 +74,44 @@ router.put(
       const updated = await userInvestmentModel.updateValue(req.params.id, currentValue, notes);
       if (!updated) return failure(res, 404, 'Plan selection not found.');
       return success(res, 200, "Client's portfolio value updated.", { selection: updated });
+    } catch (error) {
+      return next(error);
+    }
+  }
+);
+
+// Plan performance: admin reports a real, actual period return for a plan
+// tier, and it is applied in bulk to every active client in that tier.
+// This only ever runs when an admin explicitly submits a reported result —
+// nothing here accrues automatically or on a schedule.
+router.get('/plan-performance', async (req, res, next) => {
+  try {
+    const entries = await planPerformanceModel.findAll();
+    return success(res, 200, 'Plan performance history retrieved successfully.', { entries });
+  } catch (error) {
+    return next(error);
+  }
+});
+
+router.post(
+  '/plan-performance',
+  applyPeriodReturnValidator,
+  validateRequest,
+  async (req, res, next) => {
+    try {
+      const { investmentId, periodLabel, returnPercent, notes } = req.body;
+      const entry = await planPerformanceModel.applyPeriodReturn({
+        investmentId,
+        periodLabel,
+        returnPercent,
+        notes
+      });
+      return success(
+        res,
+        201,
+        `Applied ${returnPercent}% to ${entry.accountsApplied} active account(s).`,
+        { entry }
+      );
     } catch (error) {
       return next(error);
     }
