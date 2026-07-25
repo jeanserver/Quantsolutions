@@ -259,3 +259,19 @@ ALTER TABLE withdrawals ADD CONSTRAINT withdrawals_method_check
 ALTER TABLE withdrawals ALTER COLUMN bank_name DROP NOT NULL;
 ALTER TABLE withdrawals ALTER COLUMN account_name DROP NOT NULL;
 ALTER TABLE withdrawals ALTER COLUMN account_number DROP NOT NULL;
+
+-- =========================================================
+-- Client plan selection + admin-managed portfolio value
+-- Safe to re-run: guarded with IF NOT EXISTS / IF EXISTS throughout.
+-- =========================================================
+ALTER TABLE user_investments
+  ADD COLUMN IF NOT EXISTS invested_amount NUMERIC(14,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS current_value NUMERIC(14,2) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS notes TEXT,
+  ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW();
+
+ALTER TABLE user_investments ALTER COLUMN status SET DEFAULT 'pending';
+
+ALTER TABLE user_investments DROP CONSTRAINT IF EXISTS user_investments_status_check;
+ALTER TABLE user_investments ADD CONSTRAINT user_investments_status_check
+  CHECK (status IN ('pending', 'active', 'rejected', 'closed'));
