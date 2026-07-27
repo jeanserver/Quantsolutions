@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Card from '../components/common/Card.jsx';
+import PortfolioOverviewWidget from '../components/dashboard/PortfolioOverviewWidget.jsx';
 import Loader from '../components/common/Loader.jsx';
 import Alert from '../components/common/Alert.jsx';
 import { useAuth } from '../hooks/useAuth.js';
@@ -126,6 +127,10 @@ function DashboardPage() {
           <Alert variant="error">{error}</Alert>
         </div>
       )}
+
+      <div className="mb-8">
+        <PortfolioOverviewWidget />
+      </div>
 
       {loading ? (
         <Loader label="Loading your account overview..." />
