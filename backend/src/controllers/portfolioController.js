@@ -10,4 +10,13 @@ async function getSummary(req, res, next) {
   }
 }
 
-module.exports = { getSummary };
+async function getOverview(req, res, next) {
+  try {
+    const overview = await portfolioService.getOverview(req.user);
+    return success(res, 200, 'Portfolio overview retrieved successfully.', { overview });
+  } catch (error) {
+    return next(error);
+  }
+}
+
+module.exports = { getSummary, getOverview };
