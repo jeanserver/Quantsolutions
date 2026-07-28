@@ -6,6 +6,7 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/about', label: 'About' },
   { to: '/investment-solutions', label: 'Investment Solutions' },
+  { to: '/our-approach', label: 'Our Approach' },
   { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact' }
 ];
