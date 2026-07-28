@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
 import InvestmentSolutionsPage from '../pages/InvestmentSolutionsPage.jsx';
+import OurApproachPage from '../pages/OurApproachPage.jsx';
 import FAQPage from '../pages/FAQPage.jsx';
 import LegalPage from '../pages/LegalPage.jsx';
 import InvestorRelationsPage from '../pages/InvestorRelationsPage.jsx';
@@ -25,6 +26,7 @@ function AppRoutes() {
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/investment-solutions" element={<InvestmentSolutionsPage />} />
+      <Route path="/our-approach" element={<OurApproachPage />} />
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/legal" element={<LegalPage />} />
       <Route path="/about/investor-relations" element={<InvestorRelationsPage />} />
