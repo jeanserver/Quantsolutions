@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../components/common/Reveal.jsx';
-import CountUp from '../components/common/CountUp.jsx';
-import { useScrollProgress } from '../hooks/useInView.js';
+import RoadmapSection from '../components/home/RoadmapSection.jsx';
+import DashboardPreviewSection from '../components/home/DashboardPreviewSection.jsx';
 
 const pillars = [
   {
@@ -41,73 +41,26 @@ const services = [
   }
 ];
 
-const stats = [
-  { value: 5, suffix: '', label: 'Investment Tiers', sub: 'Basic through Institutional' },
-  { value: 6, suffix: '', label: 'Funding Methods', sub: 'Bank, wire, check, BTC, ETH, USDT' },
-  { value: 100, suffix: '%', label: 'Performance-Fee Model', sub: 'No guaranteed returns, ever' }
-];
 
-const steps = [
+
+const getStartedSteps = [
   {
-    number: '01',
+    number: '1',
+    title: 'Create your account',
+    description: 'Sign up in a couple of minutes with your basic details.'
+  },
+  {
+    number: '2',
     title: 'Choose your plan',
-    description:
-      'Select the tier that matches your capital and goals, from Basic to Institutional.'
+    description: 'Pick the tier that fits your capital and goals.'
   },
   {
-    number: '02',
-    title: 'Fund your account',
-    description: 'Deposit by bank transfer or crypto — your choice, reviewed and confirmed by our team.'
-  },
-  {
-    number: '03',
-    title: 'We manage it',
-    description:
-      'Your capital is allocated according to your plan and actively managed by our team.'
-  },
-  {
-    number: '04',
-    title: 'Track real performance',
-    description:
-      'See real, reported results reflected in your dashboard — never a simulated or guaranteed number.'
+    number: '3',
+    title: 'Fund and go',
+    description: 'Deposit by bank or crypto and your plan selection is reviewed by our team.'
   }
 ];
 
-function HowItWorksSection() {
-  const [sectionRef, progress] = useScrollProgress();
-
-  return (
-    <section className="section" ref={sectionRef}>
-      <div className="container-page">
-        <Reveal>
-          <h2 className="text-center text-3xl font-bold text-brand-black">How It Works</h2>
-        </Reveal>
-        <div className="relative mt-16 grid grid-cols-1 gap-10 lg:grid-cols-4">
-          <div
-            className="absolute left-0 right-0 top-6 hidden h-0.5 bg-gray-200 lg:block"
-            aria-hidden="true"
-          >
-            <div
-              className="h-full bg-brand-yellow transition-[width] duration-200 ease-out"
-              style={{ width: `${Math.round(progress * 100)}%` }}
-            />
-          </div>
-          {steps.map((step, index) => (
-            <Reveal key={step.number} delay={index * 120}>
-              <div className="relative">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-brand-yellow bg-white text-sm font-bold text-brand-black">
-                  {step.number}
-                </div>
-                <h3 className="mt-4 text-base font-semibold text-brand-black">{step.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-gray-500">{step.description}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function HomePage() {
   return (
@@ -168,18 +121,33 @@ function HomePage() {
       </section>
 
       <section className="section bg-brand-offwhite">
-        <div className="container-page grid grid-cols-1 gap-8 sm:grid-cols-3">
-          {stats.map((stat, index) => (
-            <Reveal key={stat.label} delay={index * 120} className="text-center">
-              <p className="text-4xl font-extrabold text-brand-black sm:text-5xl">
-                <CountUp value={stat.value} suffix={stat.suffix} />
-              </p>
-              <p className="mt-2 text-sm font-semibold uppercase tracking-wide text-brand-yellow">
-                {stat.label}
-              </p>
-              <p className="mt-1 text-sm text-gray-500">{stat.sub}</p>
-            </Reveal>
-          ))}
+        <div className="container-page">
+          <Reveal>
+            <h2 className="text-center text-3xl font-bold text-brand-black">
+              How to Get Started
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-center text-gray-500">
+              Three simple steps to open your account.
+            </p>
+          </Reveal>
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {getStartedSteps.map((step, index) => (
+              <Reveal key={step.number} delay={index * 130} className="text-center">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand-black text-lg font-bold text-brand-yellow">
+                  {step.number}
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-brand-black">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-sm text-gray-500">{step.description}</p>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal delay={400} className="mt-10 flex justify-center">
+            <Link to="/register" className="btn btn-primary">
+              Create Your Account
+            </Link>
+          </Reveal>
         </div>
       </section>
 
@@ -208,7 +176,9 @@ function HomePage() {
         </div>
       </section>
 
-      <HowItWorksSection />
+      <RoadmapSection />
+
+      <DashboardPreviewSection />
 
       <section className="section bg-brand-charcoal text-brand-white">
         <div className="container-page">
