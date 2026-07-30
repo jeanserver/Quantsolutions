@@ -1,5 +1,5 @@
-// A CSS/SVG phone frame with your actual dashboard-style content inside —
-// no photo or hand, just a clean device mockup in brand colors.
+// A CSS/SVG phone frame with your actual dashboard-style content inside,
+// with small ambient animations so it feels alive rather than static.
 function PhoneMockup({ className = '' }) {
   return (
     <div className={`relative mx-auto w-64 ${className}`}>
@@ -24,7 +24,15 @@ function PhoneMockup({ className = '' }) {
                     strokeWidth="2.5"
                     strokeLinecap="round"
                     strokeLinejoin="round"
+                    style={{
+                      strokeDasharray: 260,
+                      animation: 'phoneChartDraw 2.4s ease-out forwards'
+                    }}
                   />
+                  <circle cx="200" cy="4" r="4" fill="#F2B705">
+                    <animate attributeName="r" values="4;6;4" dur="1.8s" repeatCount="indefinite" begin="2.4s" />
+                    <animate attributeName="opacity" values="1;0.6;1" dur="1.8s" repeatCount="indefinite" begin="2.4s" />
+                  </circle>
                 </svg>
               </div>
             </div>
@@ -36,7 +44,12 @@ function PhoneMockup({ className = '' }) {
               </div>
               <div className="rounded-lg bg-brand-charcoal p-2.5">
                 <p className="text-[8px] uppercase tracking-wide text-gray-400">ROI</p>
-                <p className="mt-0.5 text-sm font-bold text-brand-yellow">+6.2%</p>
+                <p
+                  className="mt-0.5 text-sm font-bold text-brand-yellow"
+                  style={{ animation: 'phonePulse 2.2s ease-in-out infinite' }}
+                >
+                  +6.2%
+                </p>
               </div>
             </div>
 
@@ -45,7 +58,10 @@ function PhoneMockup({ className = '' }) {
                 <span className="text-[9px] text-gray-300">Basic Plan</span>
                 <span className="text-[9px] font-semibold text-white">$8,200</span>
               </div>
-              <div className="flex items-center justify-between rounded-lg bg-brand-yellow px-3 py-2">
+              <div
+                className="flex items-center justify-between rounded-lg bg-brand-yellow px-3 py-2"
+                style={{ animation: 'phoneGlow 3s ease-in-out infinite' }}
+              >
                 <span className="text-[9px] text-brand-black">Standard Plan</span>
                 <span className="text-[9px] font-semibold text-brand-black">$36,940</span>
               </div>
@@ -53,6 +69,21 @@ function PhoneMockup({ className = '' }) {
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes phoneChartDraw {
+          from { stroke-dashoffset: 260; }
+          to { stroke-dashoffset: 0; }
+        }
+        @keyframes phonePulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.6; }
+        }
+        @keyframes phoneGlow {
+          0%, 100% { box-shadow: 0 0 0 rgba(242, 183, 5, 0); }
+          50% { box-shadow: 0 0 14px rgba(242, 183, 5, 0.55); }
+        }
+      `}</style>
     </div>
   );
 }
