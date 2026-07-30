@@ -8,7 +8,7 @@ const pillars = [
   {
     title: 'Research-Driven Approach',
     description:
-      'Every recommendation is grounded in fundamental analysis, risk assessment, and long-term market research — not speculation.'
+      'Every recommendation is grounded in fundamental analysis, risk assessment, and long-term market research, not speculation.'
   },
   {
     title: 'Regulated & Transparent',
@@ -78,7 +78,7 @@ function HomePage() {
             <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-300">
               QuantSolutions partners with individuals and institutions to
               design portfolios rooted in research, risk management, and
-              long-term thinking — with every decision reviewed by our team
+              long-term thinking, with every decision reviewed by our team
               before it reaches your account.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
