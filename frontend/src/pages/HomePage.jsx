@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Reveal from '../components/common/Reveal.jsx';
 import RoadmapSection from '../components/home/RoadmapSection.jsx';
 import DashboardPreviewSection from '../components/home/DashboardPreviewSection.jsx';
+import PhoneMockup from '../components/home/PhoneMockup.jsx';
 
 const pillars = [
   {
@@ -93,29 +94,7 @@ function HomePage() {
             </div>
           </Reveal>
           <Reveal direction="right" delay={150}>
-            <div className="rounded-2xl border border-brand-charcoal bg-brand-dark p-8">
-              <h3 className="text-lg font-semibold text-brand-yellow">
-                Our Investment Philosophy
-              </h3>
-              <ul className="mt-5 space-y-4 text-sm text-gray-300">
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brand-yellow" />
-                  Capital preservation is prioritized alongside growth.
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brand-yellow" />
-                  Diversification across asset classes and time horizons.
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brand-yellow" />
-                  Clear, regular reporting with no hidden fees.
-                </li>
-                <li className="flex gap-3">
-                  <span className="mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-brand-yellow" />
-                  Advisors who act as fiduciaries to our clients.
-                </li>
-              </ul>
-            </div>
+            <PhoneMockup />
           </Reveal>
         </div>
       </section>
