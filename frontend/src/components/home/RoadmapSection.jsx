@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Reveal from '../common/Reveal.jsx';
-import { useInView, useScrollProgress } from '../../hooks/useInView.js';
+import { useScrollProgress } from '../../hooks/useInView.js';
 
 const roadSteps = [
   {
@@ -63,44 +63,22 @@ const roadSteps = [
   }
 ];
 
-// Fixed positions for the 5 stops along the winding road, in the SVG's
-// own coordinate space (viewBox 0 0 360 900).
+// Positions sit ON the road path itself (viewBox 0 0 360 400) — a shorter,
+// more compact version than before. Same coordinate space is used on both
+// mobile and desktop; only the container width changes via CSS.
 const markerPositions = [
-  { x: 300, y: 55 },
-  { x: 130, y: 235 },
-  { x: 290, y: 415 },
-  { x: 120, y: 595 },
-  { x: 280, y: 780 }
+  { x: 290, y: 30 },
+  { x: 110, y: 120 },
+  { x: 280, y: 210 },
+  { x: 100, y: 300 },
+  { x: 270, y: 375 }
 ];
 
 const roadPath =
-  'M300,55 C 210,150 90,160 130,235 C 210,320 350,330 290,415 ' +
-  'C 210,500 60,510 120,595 C 210,680 340,690 280,780';
+  'M290,30 C 200,75 80,85 110,120 C 190,155 320,165 280,210 ' +
+  'C 190,255 60,265 100,300 C 190,335 300,345 270,375';
 
 const markerColors = ['#F2B705', '#D9A400', '#B88A00', '#8C6900', '#5C4500'];
-
-function RoadMarker({ position, color, icon, delay }) {
-  const [ref, isInView] = useInView({ threshold: 0.4 });
-
-  return (
-    <g
-      ref={ref}
-      style={{
-        transformOrigin: `${position.x}px ${position.y}px`,
-        transition: `opacity 0.5s ease-out ${delay}ms, transform 0.5s ease-out ${delay}ms`,
-        opacity: isInView ? 1 : 0,
-        transform: isInView ? 'scale(1)' : 'scale(0.3)'
-      }}
-    >
-      <circle cx={position.x} cy={position.y} r="26" fill={color} stroke="#0A0A0A" strokeWidth="3" />
-      <foreignObject x={position.x - 13} y={position.y - 13} width="26" height="26">
-        <div className="flex h-full w-full items-center justify-center text-brand-black">
-          {icon}
-        </div>
-      </foreignObject>
-    </g>
-  );
-}
 
 function RoadmapSection() {
   const [sectionRef, progress] = useScrollProgress();
@@ -113,10 +91,12 @@ function RoadmapSection() {
     }
   }, []);
 
-  const drawProgress = Math.min(progress * 1.4, 1);
+  // Single source of truth for both the road draw-in AND when each marker
+  // appears, so the two can never fall out of sync with each other.
+  const drawProgress = Math.min(progress * 1.3, 1);
 
   return (
-    <section className="section" ref={sectionRef}>
+    <section className="section overflow-hidden" ref={sectionRef}>
       <div className="container-page">
         <Reveal>
           <h2 className="text-3xl font-bold text-brand-black">Your Path to Growth</h2>
@@ -145,8 +125,9 @@ function RoadmapSection() {
             ))}
           </div>
 
-          <div className="hidden lg:block">
-            <svg viewBox="0 0 360 900" className="h-full w-full">
+          {/* Visible on all screen sizes now, not just desktop */}
+          <div className="mx-auto w-full max-w-sm lg:max-w-none">
+            <svg viewBox="0 0 360 400" className="w-full" style={{ aspectRatio: '360 / 400' }}>
               <path
                 d={roadPath}
                 fill="none"
@@ -155,31 +136,52 @@ function RoadmapSection() {
                 strokeLinecap="round"
                 ref={pathRef}
                 style={{
-                  strokeDasharray: pathLength,
+                  strokeDasharray: pathLength || 1000,
                   strokeDashoffset: pathLength - pathLength * drawProgress
                 }}
               />
-              <path
-                d={roadPath}
-                fill="none"
-                stroke="#FAFAF8"
-                strokeWidth="2.5"
-                strokeDasharray="10 12"
-                style={{
-                  strokeDashoffset: pathLength ? pathLength - pathLength * drawProgress : 0,
-                  strokeDasharray: pathLength ? `10 12` : undefined,
-                  opacity: drawProgress > 0.02 ? 1 : 0
-                }}
-              />
-              {markerPositions.map((position, index) => (
-                <RoadMarker
-                  key={roadSteps[index].number}
-                  position={position}
-                  color={markerColors[index]}
-                  icon={roadSteps[index].icon}
-                  delay={index * 120}
+              {pathLength > 0 && (
+                <path
+                  d={roadPath}
+                  fill="none"
+                  stroke="#FAFAF8"
+                  strokeWidth="2.5"
+                  strokeDasharray="10 12"
+                  style={{
+                    strokeDashoffset: pathLength - pathLength * drawProgress,
+                    opacity: drawProgress > 0.02 ? 1 : 0
+                  }}
                 />
-              ))}
+              )}
+              {markerPositions.map((position, index) => {
+                const threshold = (index + 0.3) / markerPositions.length;
+                const isVisible = drawProgress >= threshold;
+                return (
+                  <g
+                    key={roadSteps[index].number}
+                    style={{
+                      transformOrigin: `${position.x}px ${position.y}px`,
+                      transition: 'opacity 0.4s ease-out, transform 0.4s ease-out',
+                      opacity: isVisible ? 1 : 0,
+                      transform: isVisible ? 'scale(1)' : 'scale(0.3)'
+                    }}
+                  >
+                    <circle
+                      cx={position.x}
+                      cy={position.y}
+                      r="26"
+                      fill={markerColors[index]}
+                      stroke="#0A0A0A"
+                      strokeWidth="3"
+                    />
+                    <foreignObject x={position.x - 13} y={position.y - 13} width="26" height="26">
+                      <div className="flex h-full w-full items-center justify-center text-brand-black">
+                        {roadSteps[index].icon}
+                      </div>
+                    </foreignObject>
+                  </g>
+                );
+              })}
             </svg>
           </div>
         </div>
