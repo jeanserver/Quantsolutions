@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../common/Reveal.jsx';
+import AIBadge from './AIBadge.jsx';
 
 function DashboardPreviewSection() {
   return (
@@ -22,7 +23,9 @@ function DashboardPreviewSection() {
           </Reveal>
 
           <Reveal direction="right" delay={150}>
-            <div className="relative mx-auto max-w-md">
+            <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:justify-center">
+              <AIBadge className="h-28 w-28 flex-shrink-0 sm:h-32 sm:w-32" />
+              <div className="relative mx-auto max-w-md flex-1">
               <svg
                 className="pointer-events-none absolute -left-16 -top-10 hidden h-[420px] w-[560px] lg:block"
                 viewBox="0 0 560 420"
@@ -93,6 +96,7 @@ function DashboardPreviewSection() {
                     Standard
                   </span>
                 </div>
+              </div>
               </div>
             </div>
           </Reveal>
