@@ -45,3 +45,50 @@ body {
 .label-field {
   @apply mb-1.5 block text-sm font-medium text-brand-black;
 }
+
+/* Ambient background blobs — slow, subtle drifting motion behind content */
+.bg-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@keyframes drift-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(40px, 30px) scale(1.08); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes drift-b {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-35px, 25px) scale(0.95); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes drift-c {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(25px, -30px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.bg-blob-a {
+  animation: drift-a 18s ease-in-out infinite;
+}
+
+.bg-blob-b {
+  animation: drift-b 22s ease-in-out infinite;
+}
+
+.bg-blob-c {
+  animation: drift-c 16s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-blob-a,
+  .bg-blob-b,
+  .bg-blob-c {
+    animation: none;
+  }
+}
