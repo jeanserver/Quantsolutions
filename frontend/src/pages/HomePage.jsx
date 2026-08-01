@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../components/common/Reveal.jsx';
 import DashboardPreviewSection from '../components/home/DashboardPreviewSection.jsx';
-import HubHero from '../components/home/HubHero.jsx';
+import HeroSlideshow from '../components/home/HeroSlideshow.jsx';
 import ProcessJourneySection from '../components/home/ProcessJourneySection.jsx';
 
 const pillars = [
@@ -66,22 +66,22 @@ const getStartedSteps = [
 function HomePage() {
   return (
     <div>
-      <section className="bg-brand-black text-brand-white">
-        <div className="container-page section grid grid-cols-1 items-center gap-12 lg:grid-cols-2">
-          <Reveal direction="left">
+      <section
+        className="relative bg-brand-black text-brand-white"
+        style={{
+          backgroundImage:
+            'radial-gradient(circle at 50% 30%, rgba(242,183,5,0.10), transparent 60%)'
+        }}
+      >
+        <div className="container-page section flex flex-col items-center gap-10 text-center">
+          <Reveal>
             <p className="text-sm font-semibold uppercase tracking-widest text-brand-yellow">
-              Professional Investment Management
+              AI-Assisted, Human-Reviewed
             </p>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
-              AI-assisted, human-reviewed strategies for building and preserving wealth.
+            <h1 className="mt-3 text-3xl font-extrabold leading-tight sm:text-5xl">
+              Investing shouldn't feel uncertain.
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-300">
-              QuantSolutions partners with individuals and institutions to
-              design portfolios rooted in research, risk management, and
-              long-term thinking, with every decision reviewed by our team
-              before it reaches your account.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
               <Link to="/register" className="btn btn-primary">
                 Open an Account
               </Link>
@@ -93,8 +93,8 @@ function HomePage() {
               </Link>
             </div>
           </Reveal>
-          <Reveal direction="right" delay={150}>
-            <HubHero />
+          <Reveal direction="right" delay={150} className="w-full">
+            <HeroSlideshow />
           </Reveal>
         </div>
       </section>
