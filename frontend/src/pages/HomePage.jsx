@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import Reveal from '../components/common/Reveal.jsx';
-import RoadmapSection from '../components/home/RoadmapSection.jsx';
 import DashboardPreviewSection from '../components/home/DashboardPreviewSection.jsx';
 import HeroStoryboard from '../components/home/HeroStoryboard.jsx';
+import ProcessJourneySection from '../components/home/ProcessJourneySection.jsx';
 
 const pillars = [
   {
@@ -99,6 +99,8 @@ function HomePage() {
         </div>
       </section>
 
+      <ProcessJourneySection />
+
       <section className="section bg-brand-offwhite">
         <div className="container-page">
           <Reveal>
@@ -154,8 +156,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      <RoadmapSection />
 
       <DashboardPreviewSection />
 
