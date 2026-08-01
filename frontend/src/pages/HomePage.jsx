@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Reveal from '../components/common/Reveal.jsx';
 import RoadmapSection from '../components/home/RoadmapSection.jsx';
 import DashboardPreviewSection from '../components/home/DashboardPreviewSection.jsx';
-import PhoneMockup from '../components/home/PhoneMockup.jsx';
+import HeroStoryboard from '../components/home/HeroStoryboard.jsx';
 
 const pillars = [
   {
@@ -94,7 +94,7 @@ function HomePage() {
             </div>
           </Reveal>
           <Reveal direction="right" delay={150}>
-            <PhoneMockup />
+            <HeroStoryboard />
           </Reveal>
         </div>
       </section>
