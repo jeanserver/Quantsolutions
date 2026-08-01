@@ -82,7 +82,35 @@ function ProcessJourneySection() {
           </p>
         </Reveal>
 
-        <div className="mt-14">
+        {/* Mobile: simple stacked list, no SVG (avoids squishing a wide graphic) */}
+        <div className="mt-10 space-y-3 sm:hidden">
+          {stops.map((stop) => (
+            <div
+              key={stop.key}
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 ${
+                stop.highlight ? 'bg-brand-yellow' : 'bg-brand-charcoal'
+              }`}
+            >
+              {stop.highlight ? (
+                <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-brand-black/10">
+                  <StopIcon type={stop.icon} />
+                </span>
+              ) : (
+                <span className="h-2 w-2 flex-shrink-0 rounded-full bg-brand-yellow" />
+              )}
+              <span
+                className={`text-sm font-medium ${
+                  stop.highlight ? 'text-brand-black' : 'text-gray-200'
+                }`}
+              >
+                {stop.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop/tablet: the winding line graphic */}
+        <div className="mt-14 hidden sm:block">
           <svg viewBox="0 0 1000 480" className="w-full">
             <path
               d={linePath}
